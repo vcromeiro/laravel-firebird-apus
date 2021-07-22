@@ -5,7 +5,7 @@ namespace Firebird\Query\Grammars;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\Grammar;
 
-class FirebirdGrammar extends Grammar
+class Firebird2Grammar extends Grammar
 {
     /**
      * All of the available clause operators.
@@ -16,6 +16,7 @@ class FirebirdGrammar extends Grammar
         '=', '<', '>', '<=', '>=', '<>', '!=',
         'like', 'not like', 'between', 'containing', 'starting with',
         'similar to', 'not similar to',
+        'is distinct from', 'is not distinct from',
     ];
 
     /**
@@ -171,7 +172,7 @@ class FirebirdGrammar extends Grammar
         for ($i = 0; $i < ceil(count($where['values']) / $limit); $i++) {
             ($i !== 0) && $sql .= ' OR ';
 
-            $sql .= static::whereIn(
+            $sql .= $this->whereIn(
                 $query,
                 $this->sliceWhereValues($where, $i * $limit, $limit)
             );
